@@ -1,0 +1,40 @@
+@model BTCPayServer.Plugins.Kratos.KratosPluginPageViewModel
+@using Microsoft.AspNetCore.Identity
+@using BTCPayServer.Data
+@inject UserManager<ApplicationUser> _userManager;
+@* @{
+    var userId = _userManager.GetUserId(User);
+    var myUser = _userManager.GetUserAsync(User).Result;
+    var isAdmin = _userManager.IsInRoleAsync(myUser, "ServerAdmin").Result;
+} *@
+
+<div class="container">
+    <h1>Kratos</h1>
+    <br>
+    <br>
+    <p>
+        This plugin adds an authentication layer for Kratos. Your Scheme needs to have an email trait! <br>
+       <span class="text-danger">The author of this plugin does not advise its use since this code was not reviewed by an experienced C# developer.</span> 
+    </p>
+    <br>
+    <div class="row">
+        <form method="post">
+            <div class="form-group mb-5">
+                <h4 class="mb-3">Kratos Configuration</h4>
+                <p>
+                    For now changes will only be active after rebooting the server.
+                </p>
+                <div class="form-check my-3">
+                    <input asp-for="KratosConfig.KratosEnabled" type="checkbox" class="form-check-input" />
+                    <label asp-for="KratosConfig.KratosEnabled" class="form-check-label"></label>
+                    <br>
+                    <br>
+                    <label asp-for="KratosConfig.KratosPublic" class="form-label"></label>
+                    <input asp-for="KratosConfig.KratosPublic" data-fill="server" class="form-control" />
+                    <span asp-validation-for="KratosConfig.KratosPublic" class="text-danger"></span>
+                </div>
+            </div>
+            <button id="SaveButton" type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>

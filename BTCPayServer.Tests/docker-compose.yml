@@ -59,6 +59,8 @@ services:
       - merchant_lnd
       - sshd
       - tor
+      - kratos
+      - kratos-selfservice-ui-node
 
   sshd:
     build:
@@ -224,6 +226,7 @@ services:
     image:  postgres:13.4
     environment:
         POSTGRES_HOST_AUTH_METHOD: trust
+        POSTGRES_DB: kratos
     ports:
       - "39372:5432"
     expose:
@@ -315,6 +318,63 @@ services:
         - "tor_datadir:/home/tor/.tor"
         - "torrcdir:/usr/local/etc/tor"
         - "tor_servicesdir:/var/lib/tor/hidden_services"
+
+  kratos:
+    container_name: kratos
+    depends_on:
+      - kratos-migrate
+    image: oryd/kratos:v0.11.0
+    # watch-courier is set for sending verification/recovery emails
+    command: serve -c /etc/kratos/config/kratos.yml --dev --watch-courier
+    volumes:
+      - type: bind
+        source: ./kratos-config
+        target: /etc/kratos/config
+      - type: bind
+        source: ./kratos-identity-schemas
+        target: /etc/kratos/identity-schemas
+    ports:
+      - 4433:4433 # public
+      - 4434:4434 # admin
+    expose:
+      - "4433"
+      - "4434"
+
+  kratos-selfservice-ui-node:
+    depends_on:
+      - kratos
+    container_name: kratos-selfservice-ui-node
+    image: oryd/kratos-selfservice-ui-node:v0.11.0
+    environment:
+      - KRATOS_PUBLIC_URL=http://kratos:4433/
+      - KRATOS_BROWSER_URL=http://localhost:4433/
+      - PORT=4455
+    ports:
+      - 4455:4455
+    expose:
+     - "4455"
+
+  kratos-migrate:
+    depends_on:
+      - postgres
+    container_name: kratos-migrate
+    image: oryd/kratos:v0.11.0
+    # to run db migrations we use the kratos-cli but don't need to mount the config directory
+    # as we only require the DSN to be set as the environment variable for running the migrations
+    environment:
+      - DSN=postgres://postgres@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    command: migrate sql -e --yes
+
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    ports:
+      - 4436:4436
+      - 4437:4437
+      - 1025:1025
+    expose:
+      - "4436"
+      - "4437"
+      - "1025"
 
 volumes:
     sshd_datadir:
