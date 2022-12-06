@@ -11,7 +11,7 @@ namespace BTCPayServer.Plugins.Kratos.Data
         [Display(Name = "Enable Kratos Authentication")]
         public bool KratosEnabled { get; set; }
 
-        [Display(Name = "Public Kratos Endpoint. Please use the full path akin to 'https://your.kratos.domain' ")]
+        [Display(Name = "Public Kratos Endpoint. Please use the URI without path like so 'https://your.kratos.domain' ")]
         [KratosPublicAttribute]
         public string KratosPublic { get; set; }
 

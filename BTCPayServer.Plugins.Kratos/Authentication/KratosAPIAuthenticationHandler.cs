@@ -48,6 +48,9 @@ namespace BTCPayServer.Plugins.Kratos.Auth
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            if (!_kratosService.GetSettings().KratosEnabled)
+                return AuthenticateResult.NoResult();
+            
             try
             {
                 // Check if Cookie is set
@@ -94,7 +97,7 @@ namespace BTCPayServer.Plugins.Kratos.Auth
 
                 //We use the GUID from Kratos here. That way we can correlate the users even if they change the email address.
                 newuser.Id = kratosUser.Id;
-                
+
                 //Generate a random password
                 var password = new Password(includeLowercase: true, includeUppercase: true, includeNumeric: true, includeSpecial: false, passwordLength: 32).Next();
 

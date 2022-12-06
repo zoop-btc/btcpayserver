@@ -9,7 +9,7 @@ using System;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace BTCPayServer.Plugins.Kratos.Services;
-public class KratosInitConfig : IHostedService
+public class KratosInitConfig : IStartupTask
 {
     public static KratosConf DefaultKratosConf()
     {
@@ -28,7 +28,7 @@ public class KratosInitConfig : IHostedService
         _settingsRepository = settingsRepository;
         _descriptorCollectionProvider = descriptorCollectionProvider;
     }
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         var kratosConfig = await _settingsRepository.GetSettingAsync<KratosConf>();
 
@@ -38,8 +38,4 @@ public class KratosInitConfig : IHostedService
         }
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
 }

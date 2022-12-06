@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
+using BTCPayServer.Abstractions.Extensions;
 
 namespace BTCPayServer.Plugins.Kratos
 {
@@ -21,17 +22,7 @@ namespace BTCPayServer.Plugins.Kratos
         public override void Execute(IServiceCollection services)
         {
 
-            services.AddHostedService<KratosInitConfig>();
-            // services.AddSingleton(container =>
-            // {
-            //     var settingsrepo = container.GetRequiredService<ISettingsRepository>();
-            //     var kratosconfig = settingsrepo.GetSettingAsync<KratosConf>().Result;
-            //     if (kratosconfig == null)
-            //     { throw new ArgumentException("Parameter cannot be null", nameof(kratosconfig)); }
-
-            //     return new KratosService(kratosconfig.KratosPublic);
-            // });
-            // services.AddHostedService<KratosService>();
+            services.AddStartupTask<KratosInitConfig>();
             services.AddSingleton<KratosService>();
             services.AddSingleton<IUIExtension>(new UIExtension("KratosExtensionNavExtension", "header-nav"));
 

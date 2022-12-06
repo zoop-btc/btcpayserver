@@ -1,4 +1,7 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using BTCPayServer.Plugins.Kratos.Services;
 
 namespace BTCPayServer.Plugins.Kratos.Validation
 {
@@ -15,13 +18,27 @@ namespace BTCPayServer.Plugins.Kratos.Validation
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var str = value as string;
-            
-            var result = KratosPublicValidator.IsKratosEndpoint(str);
+            try
+            {
+                var kratosservice = (KratosService)validationContext.GetService(typeof(KratosService));
+                var schemas = kratosservice.GetValidSchemes(str).Result;
 
-            if (result == "ok")
-                return ValidationResult.Success;
-
-            return new ValidationResult(result);
+                if (schemas.Any())
+                {
+                    return ValidationResult.Success;
+                }
+                else
+                {
+                    return new ValidationResult("No Schemas with Email Trait found for " + str);
+                }
+            }
+            catch (AggregateException e){
+                return new ValidationResult(string.Join(" ", e.InnerExceptions.Select(ex => ex.Message)));
+            }
+            catch (Exception e)
+            {
+                return new ValidationResult(e.Message);
+            }
         }
     }
 }

@@ -49,6 +49,8 @@ namespace BTCPayServer.Plugins.Kratos.Auth
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            if (!_kratosService.GetSettings().KratosEnabled)
+                return AuthenticateResult.NoResult();
             //If the user is already signed in we don't want to check for anything
             if (Context.User.Identity.IsAuthenticated)
             {
@@ -99,17 +101,13 @@ namespace BTCPayServer.Plugins.Kratos.Auth
                     RequiresEmailConfirmation = false,
                     Created = DateTimeOffset.UtcNow
                 };
-
                 //We use the GUID from Kratos here. That way we can correlate the users even if they change the email address.
                 newuser.Id = kratosUser.Id;
-
                 var password = new Password(includeLowercase: true, includeUppercase: true, includeNumeric: true, includeSpecial: false, passwordLength: 32).Next();
-
-                var result = await _userManager.CreateAsync(newuser, "Turboswordfish8000");
+                var result = await _userManager.CreateAsync(newuser, password);
                 if (result.Succeeded)
                 {
                     user = await _userManager.FindByIdAsync(kratosUser.Id);
-
                 }
                 else
                 {

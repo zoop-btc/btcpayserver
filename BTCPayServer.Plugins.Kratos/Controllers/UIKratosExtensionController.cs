@@ -18,21 +18,21 @@ namespace BTCPayServer.Plugins.Kratos
     public class UIKratosExtensionController : Controller
     {
         protected readonly UserManager<ApplicationUser> _userManager;
-        // private readonly KratosPluginService _KratosPluginService;
         private readonly ISettingsRepository _settingsRepository;
 
-        public UIKratosExtensionController(UserManager<ApplicationUser> userManager, ISettingsRepository settingsRepository)
+        private readonly KratosService _kratosService;
+
+        public UIKratosExtensionController(UserManager<ApplicationUser> userManager, ISettingsRepository settingsRepository, KratosService kratosService)
         {
             _userManager = userManager;
-            // _KratosPluginService = KratosPluginService;
             _settingsRepository = settingsRepository;
+            _kratosService = kratosService;
         }
 
         public async Task<IActionResult> Index()
         {
             return View(new KratosPluginPageViewModel()
             {
-                // UserData = await _KratosPluginService.Get(),
                 KratosConfig = await _settingsRepository.GetSettingAsync<KratosConf>()
             });
         }
@@ -43,8 +43,8 @@ namespace BTCPayServer.Plugins.Kratos
             if (ModelState.IsValid)
             {
                 var config = model.KratosConfig;
-                System.Console.WriteLine($"Update URL to {config.KratosPublic}");
                 await _settingsRepository.UpdateSetting(config);
+                _kratosService.RefreshKratosSettings();
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -55,9 +55,6 @@ namespace BTCPayServer.Plugins.Kratos
     }
     public class KratosPluginPageViewModel
     {
-        // [Display(Name = "Data of the Users")]
-        // public List<ApplicationUser> UserData { get; set; }
-
         [Display(Name = "Kratos Configuration")]
         public KratosConf KratosConfig { get; set; }
     }
