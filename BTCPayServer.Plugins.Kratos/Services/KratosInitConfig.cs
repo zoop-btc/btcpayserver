@@ -1,12 +1,7 @@
-
 using System.Threading;
 using System.Threading.Tasks;
 using BTCPayServer.Abstractions.Contracts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using BTCPayServer.Plugins.Kratos.Data;
-using System;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace BTCPayServer.Plugins.Kratos.Services;
 public class KratosInitConfig : IStartupTask
@@ -19,14 +14,10 @@ public class KratosInitConfig : IStartupTask
             KratosPublic = "http://localhost:4433"
         };
     }
-
     private readonly ISettingsRepository _settingsRepository;
-    private readonly IActionDescriptorCollectionProvider _descriptorCollectionProvider;
-
-    public KratosInitConfig(ISettingsRepository settingsRepository, IActionDescriptorCollectionProvider descriptorCollectionProvider)
+    public KratosInitConfig(ISettingsRepository settingsRepository)
     {
         _settingsRepository = settingsRepository;
-        _descriptorCollectionProvider = descriptorCollectionProvider;
     }
     public async Task ExecuteAsync(CancellationToken cancellationToken)
     {

@@ -1,14 +1,10 @@
-using System;
 using BTCPayServer.Abstractions.Contracts;
 using BTCPayServer.Abstractions.Models;
 using BTCPayServer.Abstractions.Services;
 using BTCPayServer.Plugins.Kratos.Auth;
-using BTCPayServer.Plugins.Kratos.Data;
 using BTCPayServer.Plugins.Kratos.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Hosting;
 using BTCPayServer.Abstractions.Extensions;
 
 namespace BTCPayServer.Plugins.Kratos

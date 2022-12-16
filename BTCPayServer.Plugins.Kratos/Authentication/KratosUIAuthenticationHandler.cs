@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -107,6 +105,7 @@ namespace BTCPayServer.Plugins.Kratos.Auth
                 var result = await _userManager.CreateAsync(newuser, password);
                 if (result.Succeeded)
                 {
+                    _logger.LogInformation($"Registered new user: {kratosUser.Traits.Email} with ID {kratosUser.Id}");
                     user = await _userManager.FindByIdAsync(kratosUser.Id);
                 }
                 else

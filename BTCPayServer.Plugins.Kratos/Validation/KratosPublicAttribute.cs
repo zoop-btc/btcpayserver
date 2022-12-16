@@ -10,11 +10,7 @@ namespace BTCPayServer.Plugins.Kratos.Validation
     /// </summary>
     public class KratosPublicAttribute : ValidationAttribute
     {
-        public KratosPublicAttribute()
-        {
-            ErrorMessage = ErrorMessageConst;
-        }
-        public const string ErrorMessageConst = "Could not verify Kratos Public Endpoint.";
+        public KratosPublicAttribute(){}
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var str = value as string;

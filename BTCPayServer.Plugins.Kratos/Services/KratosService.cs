@@ -4,13 +4,8 @@ using System;
 using BTCPayServer.Plugins.Kratos.Models;
 using BTCPayServer.Plugins.Kratos.Data;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Text.Json;
 using BTCPayServer.Abstractions.Contracts;
-using System.Threading;
-using Microsoft.Extensions.Hosting;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace BTCPayServer.Plugins.Kratos.Services
 {
@@ -30,7 +25,7 @@ namespace BTCPayServer.Plugins.Kratos.Services
         public void RefreshKratosSettings()
         {
             _kratosSettings = _settingsRepository.GetSettingAsync<KratosConf>().Result;
-            Console.WriteLine($"Settings were updated, path: {_kratosSettings.KratosPublic} enabled: {_kratosSettings.KratosEnabled}");
+            // Console.WriteLine($"Settings were updated, path: {_kratosSettings.KratosPublic} enabled: {_kratosSettings.KratosEnabled}");
         }
 
         public KratosConf GetSettings()
@@ -61,9 +56,7 @@ namespace BTCPayServer.Plugins.Kratos.Services
                     schemas.Add(schemaid);
                 }
             }
-
             return schemas;
-
         }
 
         public async Task<KratosIdentity> GetUserIdByToken(string token)
@@ -93,6 +86,5 @@ namespace BTCPayServer.Plugins.Kratos.Services
 
             return whoami.Identity;
         }
-
     }
 }

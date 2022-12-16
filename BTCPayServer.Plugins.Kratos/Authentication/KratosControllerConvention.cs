@@ -1,4 +1,3 @@
-using System;
 using BTCPayServer.Abstractions.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -9,12 +8,12 @@ public class KratosControllerConvention : IControllerModelConvention
 {
     public void Apply(ControllerModel controller)
     {
-        Console.WriteLine($"\n--> Controller {controller.ControllerName} :");
+        // Console.WriteLine($"\n--> Controller {controller.ControllerName} :");
         foreach (object attribute in controller.Attributes)
         {
             if (attribute is AuthorizeAttribute authattribute)
             {
-                Console.WriteLine($"Policies: {authattribute.Policy}");
+                // Console.WriteLine($"Policies: {authattribute.Policy}");
                 if (authattribute.AuthenticationSchemes is not null)
                 {
                     if (authattribute.AuthenticationSchemes.Contains(AuthenticationSchemes.Cookie))
@@ -26,9 +25,9 @@ public class KratosControllerConvention : IControllerModelConvention
                     authattribute.AuthenticationSchemes.Contains(AuthenticationSchemes.GreenfieldBasic))
                     {
                         authattribute.AuthenticationSchemes = authattribute.AuthenticationSchemes + ",Kratos.API";
-                    }                    
+                    }
                 }
-                Console.WriteLine($"Schemes: {authattribute.AuthenticationSchemes}");
+                // Console.WriteLine($"Schemes: {authattribute.AuthenticationSchemes}");
             }
         }
     }
