@@ -13,7 +13,7 @@ namespace BTCPayServer.Plugins.Kratos
     {
         public override string Identifier { get; } = "BTCPayServer.Plugins.Kratos";
         public override string Name { get; } = "Kratos";
-        public override string Description { get; } = "Add Kratos Authentication Middleware.";
+        public override string Description { get; } = "Add Kratos Authentication Method.";
 
         public override void Execute(IServiceCollection services)
         {
@@ -31,8 +31,6 @@ namespace BTCPayServer.Plugins.Kratos
                 options.Conventions.Add(new KratosControllerConvention());
                 options.Conventions.Add(new KratosActionConvention());
             });
-
-
 
         }
     }
