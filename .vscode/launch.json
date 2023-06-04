@@ -8,7 +8,7 @@
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build_solution",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/BTCPayServer/bin/Debug/net6.0/BTCPayServer.dll",
             "args": [],
