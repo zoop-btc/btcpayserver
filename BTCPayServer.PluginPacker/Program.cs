@@ -69,16 +69,17 @@ namespace BTCPayServer.PluginPacker
             }
             await File.WriteAllTextAsync(sha256dirs, sha256sums.ToString());
 
-            // try Windows executable first, fall back to macOS/Linux PowerShell
+            // try Linux executable first, fall back to Windows PowerShell
             try
             {
-                await CreateShasums("powershell.exe", sha256dirs, outputDir);
+                await CreateShasums("bash", sha256dirs, outputDir);
             }
             catch (Exception)
             {
                 try
                 {
-                    await CreateShasums("bash", sha256dirs, outputDir);
+
+                    await CreateShasums("powershell.exe", sha256dirs, outputDir);
                 }
                 catch (Exception ex)
                 {
